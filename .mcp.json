@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "codeguard": {
+      "type": "http",
+      "url": "http://optiplex7090.internal:8787/mcp"
+    }
+  }
+}
