@@ -82,9 +82,9 @@ class TestClientShutdown:
 
 
 class TestServerWiring:
-    def test_all_46_tools_registered(self, server_config: Config) -> None:
+    def test_all_43_tools_registered(self, server_config: Config) -> None:
         mcp = create_server(server_config)
-        assert len(mcp._tool_manager._tools) == 46
+        assert len(mcp._tool_manager._tools) == 43
 
     def test_tool_names_are_unique(self, server_config: Config) -> None:
         mcp = create_server(server_config)

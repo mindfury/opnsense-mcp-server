@@ -11,7 +11,7 @@ A Python [Model Context Protocol](https://modelcontextprotocol.io/) server that 
 
 ## What it does
 
-The server proxies 46 OPNsense API endpoints across eight domains as MCP tools, letting AI clients query and mutate firewall state through natural language.
+The server proxies 43 OPNsense API endpoints across eight domains as MCP tools, letting AI clients query and mutate firewall state through natural language.
 
 | Domain | Tools | Capabilities |
 |--------|-------|--------------|
@@ -20,8 +20,8 @@ The server proxies 46 OPNsense API endpoints across eight domains as MCP tools, 
 | Interfaces | 4 | Interface list, config, ARP/NDP tables |
 | DHCP | 3 | Lease list, settings, static mappings |
 | Routes | 5 | Static route CRUD and apply |
-| DNS | 8 | Host override CRUD, lookup, cache flush, apply |
-| IDS | 2 | Alert list, ruleset list |
+| DNS | 6 | Unbound settings and host override CRUD |
+| IDS | 1 | Ruleset list |
 | Services | 4 | Start/stop/restart/status for core modules |
 
 Mutating operations follow OPNsense's staged-then-apply model: changes are staged by `_add`/`_update`/`_delete` tools and committed by the corresponding `_apply` tool.
