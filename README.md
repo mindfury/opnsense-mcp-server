@@ -3,6 +3,7 @@
 [![CI](https://github.com/tazendor/opnsense-mcp-server/actions/workflows/ci.yml/badge.svg)](https://github.com/tazendor/opnsense-mcp-server/actions/workflows/ci.yml)
 [![PyPI](https://img.shields.io/pypi/v/tazendor-opnsense-mcp)](https://pypi.org/project/tazendor-opnsense-mcp/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Built with SpecKit](https://img.shields.io/badge/built%20with-SpecKit-6f42c1)](https://github.com/github/spec-kit)
 
 **GitHub**: https://github.com/tazendor/opnsense-mcp-server
 
