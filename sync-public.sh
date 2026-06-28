@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Merge main into the public branch (strips .specify/) and push to the public remote.
+# Merge main into the public branch, strip internal artifacts, push to public remote.
 set -euo pipefail
 
 CURRENT=$(git rev-parse --abbrev-ref HEAD)
@@ -10,11 +10,18 @@ git checkout public
 echo "Merging main..."
 git merge main --no-edit
 
-# .specify/ may have been re-introduced by the merge; re-strip it.
-if git ls-files --error-unmatch .specify/ &>/dev/null 2>&1; then
-    echo "Re-stripping .specify/ after merge..."
-    git rm --cached -r .specify/
-    git commit -m "Remove .specify/ from public branch"
+# Strip internal artifacts re-introduced by the merge.
+STRIP_PATHS=(.specify/ specs/ CLAUDE.md)
+STRIPPED=()
+for path in "${STRIP_PATHS[@]}"; do
+    if git ls-files --error-unmatch "$path" &>/dev/null 2>&1; then
+        git rm --cached -r "$path"
+        STRIPPED+=("$path")
+    fi
+done
+if [ ${#STRIPPED[@]} -gt 0 ]; then
+    echo "Re-stripping: ${STRIPPED[*]}"
+    git commit -m "Remove internal artifacts from public branch"
 fi
 
 echo "Pushing to public remote..."
