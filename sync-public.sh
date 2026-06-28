@@ -28,6 +28,6 @@ echo "Pushing to public remote..."
 git push public public:main
 
 echo "Returning to $CURRENT..."
-git checkout "$CURRENT"
+git checkout -f "$CURRENT" 2>/dev/null || git checkout -f "$CURRENT"
 
 echo "Done. Public repo is up to date."
