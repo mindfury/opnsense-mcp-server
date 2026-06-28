@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+from collections.abc import AsyncGenerator
+from contextlib import asynccontextmanager
+
 from mcp.server.fastmcp import FastMCP
 
 from opnsense_mcp.client import OPNsenseClient
@@ -8,12 +11,21 @@ from opnsense_mcp.tools import dhcp, dns, firewall, interfaces, routes, services
 
 
 def create_server(config: Config) -> FastMCP:
+    client = OPNsenseClient(config)
+
+    @asynccontextmanager
+    async def lifespan(app: FastMCP) -> AsyncGenerator[None, None]:
+        try:
+            yield
+        finally:
+            await client.aclose()
+
     mcp: FastMCP = FastMCP(
         "opnsense-mcp-server",
         host=config.http_host,
         port=config.http_port,
+        lifespan=lifespan,
     )
-    client = OPNsenseClient(config)
     for module in (system, firewall, interfaces, routes, dhcp, dns, services):
         module.register_tools(mcp, client)
     return mcp

@@ -48,6 +48,11 @@ class OPNsenseClient:
             self._http = self._make_http()
         return self._http
 
+    async def aclose(self) -> None:
+        if self._http is not None:
+            await self._http.aclose()
+            self._http = None
+
     def _log(
         self,
         method: str,

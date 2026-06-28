@@ -1,11 +1,12 @@
 """Startup validation and transport configuration tests (T037, T038)."""
 
 import errno
+from pathlib import Path
 from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from opnsense_mcp.__main__ import main
+from opnsense_mcp.__main__ import _DEFAULT_CONFIG, main
 from opnsense_mcp.config import Config
 from opnsense_mcp.errors import OPNsenseAPIError, ToolError
 
@@ -191,3 +192,28 @@ class TestTransportConfiguration:
             main()
         assert exc_info.value.code == 1
         assert "8080" in capsys.readouterr().err
+
+
+class TestDefaultConfigPath:
+    def test_default_path_is_user_config_toml(self) -> None:
+        expected = Path.home() / ".config" / "opnsense-mcp" / "config.toml"
+        assert expected == _DEFAULT_CONFIG
+
+    def test_main_passes_default_path_to_config_load(
+        self,
+        base_config: Config,
+        mock_client_cm: AsyncMock,
+        monkeypatch: pytest.MonkeyPatch,
+    ) -> None:
+        mock_load = MagicMock(return_value=base_config)
+        monkeypatch.setattr("opnsense_mcp.__main__.Config.load", mock_load)
+        monkeypatch.setattr(
+            "opnsense_mcp.__main__.OPNsenseClient",
+            MagicMock(return_value=mock_client_cm),
+        )
+        mock_mcp = MagicMock()
+        monkeypatch.setattr("opnsense_mcp.__main__.create_server", lambda c: mock_mcp)
+
+        main()
+
+        mock_load.assert_called_once_with(_DEFAULT_CONFIG)
