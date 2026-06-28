@@ -92,20 +92,12 @@ class TestFirewallAliasIntegration:
             await _alias_apply(live_client)
 
 
-_NAT_SKIP = pytest.mark.xfail(
-    reason="firewall/nat/* requires os-firewall plugin (not installed)",
-    strict=False,
-)
-
-
 @pytest.mark.integration
 class TestFirewallNatIntegration:
-    @_NAT_SKIP
     async def test_nat_list_returns_rows_key(self, live_client: OPNsenseClient) -> None:
         result = await _nat_list(live_client)
         assert "rows" in result
 
-    @_NAT_SKIP
     async def test_nat_crud_cycle(self, live_client: OPNsenseClient) -> None:
         rule = {
             "interface": "wan",

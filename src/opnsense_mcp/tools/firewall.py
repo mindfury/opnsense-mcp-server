@@ -126,7 +126,7 @@ async def _nat_list(
 ) -> dict[str, Any]:
     try:
         return await client.post(
-            "firewall/nat/searchrule",
+            "firewall/d_nat/searchrule",
             {"current": current, "rowCount": row_count, "searchPhrase": search_phrase},
         )
     except OPNsenseAPIError as exc:
@@ -135,7 +135,7 @@ async def _nat_list(
 
 async def _nat_add(client: OPNsenseClient, rule: dict[str, Any]) -> dict[str, Any]:
     try:
-        return await client.post("firewall/nat/addrule", {"rule": rule})
+        return await client.post("firewall/d_nat/addrule", {"rule": rule})
     except OPNsenseAPIError as exc:
         raise ToolError.from_api_error(exc) from exc
 
@@ -144,21 +144,21 @@ async def _nat_update(
     client: OPNsenseClient, uuid: str, rule: dict[str, Any]
 ) -> dict[str, Any]:
     try:
-        return await client.post(f"firewall/nat/setrule/{uuid}", {"rule": rule})
+        return await client.post(f"firewall/d_nat/setrule/{uuid}", {"rule": rule})
     except OPNsenseAPIError as exc:
         raise ToolError.from_api_error(exc) from exc
 
 
 async def _nat_delete(client: OPNsenseClient, uuid: str) -> dict[str, Any]:
     try:
-        return await client.post(f"firewall/nat/delrule/{uuid}", None)
+        return await client.post(f"firewall/d_nat/delrule/{uuid}", None)
     except OPNsenseAPIError as exc:
         raise ToolError.from_api_error(exc) from exc
 
 
 async def _nat_apply(client: OPNsenseClient) -> dict[str, Any]:
     try:
-        return await client.post("firewall/nat/apply", None)
+        return await client.post("firewall/d_nat/apply", None)
     except OPNsenseAPIError as exc:
         raise ToolError.from_api_error(exc) from exc
 
