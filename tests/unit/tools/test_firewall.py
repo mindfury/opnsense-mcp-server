@@ -229,7 +229,7 @@ class TestFirewallNatList:
         mock_client.post.return_value = {"rows": [], "total": 0, "current": 1}
         await _nat_list(mock_client)
         mock_client.post.assert_called_once_with(
-            "firewall/nat/searchrule",
+            "firewall/d_nat/searchrule",
             {"current": 1, "rowCount": -1, "searchPhrase": ""},
         )
 
@@ -245,7 +245,9 @@ class TestFirewallNatAdd:
         rule = {"interface": "wan", "destination_port": "80"}
         mock_client.post.return_value = {"result": "saved", "uuid": "nat-uuid-1"}
         await _nat_add(mock_client, rule=rule)
-        mock_client.post.assert_called_once_with("firewall/nat/addrule", {"rule": rule})
+        mock_client.post.assert_called_once_with(
+            "firewall/d_nat/addrule", {"rule": rule}
+        )
 
     async def test_returns_uuid(self, mock_client: AsyncMock) -> None:
         mock_client.post.return_value = {"result": "saved", "uuid": "nat-uuid-1"}
@@ -259,7 +261,7 @@ class TestFirewallNatUpdate:
         mock_client.post.return_value = {"result": "saved"}
         await _nat_update(mock_client, uuid="nat-uuid-1", rule=rule)
         mock_client.post.assert_called_once_with(
-            "firewall/nat/setrule/nat-uuid-1", {"rule": rule}
+            "firewall/d_nat/setrule/nat-uuid-1", {"rule": rule}
         )
 
 
@@ -268,7 +270,7 @@ class TestFirewallNatDelete:
         mock_client.post.return_value = {"result": "deleted"}
         result = await _nat_delete(mock_client, uuid="nat-uuid-1")
         mock_client.post.assert_called_once_with(
-            "firewall/nat/delrule/nat-uuid-1", None
+            "firewall/d_nat/delrule/nat-uuid-1", None
         )
         assert result["result"] == "deleted"
 
@@ -277,5 +279,5 @@ class TestFirewallNatApply:
     async def test_calls_correct_endpoint(self, mock_client: AsyncMock) -> None:
         mock_client.post.return_value = {"status": "ok"}
         result = await _nat_apply(mock_client)
-        mock_client.post.assert_called_once_with("firewall/nat/apply", None)
+        mock_client.post.assert_called_once_with("firewall/d_nat/apply", None)
         assert result["status"] == "ok"
