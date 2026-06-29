@@ -228,6 +228,9 @@ You can run the server in stdio mode so that a client such as Claude Desktop or 
       "command": "docker",
       "args": [
         "run", "--rm", "-i",
+        "--read-only", "--tmpfs", "/tmp",
+        "--cap-drop", "ALL",
+        "--security-opt", "no-new-privileges:true",
         "--env-file", "/path/to/.env",
         "opnsense-mcp",
         "opnsense-mcp"

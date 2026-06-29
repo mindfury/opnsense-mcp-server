@@ -18,3 +18,14 @@ services:
       - no-new-privileges:true
     cap_drop:
       - ALL
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 256M
+    networks:
+      - mcp
+
+networks:
+  mcp:
+    driver: bridge
